@@ -11,7 +11,7 @@ infrastructure_repository ?= ../infrastructure
 
 
 .PHONY: _help
-# print help as the default target.
+# print help as the default target. 
 # since hte actual help recipe is quite long, it is moved
 # to the bottom of this makefile.
 _help: help
@@ -20,15 +20,9 @@ ifeq ($(env_name),minikube)
 include mk/minikube.mk
 export terraform_auto_approve=-auto-approve
 else
-    ifeq ($(env_name),dev)
-    	include mk/gcloud.mk
-    	#no auto approve in gcloud dev environment
-    	export terraform_auto_approve=
-    else
-        ifneq ($(subst help,,$(MAKECMDGOALS)),)
-    		$(error only env_name [minikube,dev] are supported)
-        endif
-    endif
+include mk/gcloud.mk
+#no auto approve in gcloud dev environment
+export terraform_auto_approve=
 endif
 
 include mk/help.mk
@@ -43,8 +37,11 @@ include mk/tools.mk
 
 .PHONY: project_deploy
 # deploy the project to an already running cluster
-project_deploy: build_images terraform_apply provide_athene2_content restore_dashboards
-
+ifeq ($(env_name),minikube)
+project_deploy: build_images terraform_apply
+else
+project_deploy: terraform_apply
+endif
 
 .PHONY: project_launch
 # launch the grafana dashboard

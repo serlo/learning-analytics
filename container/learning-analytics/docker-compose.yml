@@ -1,0 +1,49 @@
+version: "3"
+services:
+  rabbit:
+    image: "rabbitmq:management"
+    container_name: "rabbit"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    expose: ["5672"]
+
+  nifi:
+    image: "apache/nifi:latest"
+    container_name: "nifi"
+    # environment:
+    #   - NIFI_WEB_HTTP_PORT=8080
+    #   - NIFI_CLUSTER_IS_NODE=true
+    #   - NIFI_CLUSTER_NODE_PROTOCOL_PORT=8082
+    #   - NIFI_ZK_CONNECT_STRING=zookeeper:2181
+    #   - NIFI_ELECTION_MAX_WAIT=1 min
+    volumes:
+        - ./conf:/opt/nifi/nifi-current/conf
+        - ./drivers:/opt/nifi/nifi-current/drivers
+    ports:
+      - "8080:8080"
+      - "8081:80"
+
+  postgres:
+    image: "postgres:latest"
+    container_name: "nifi_postgres"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      # POSTGRES_DB
+    ports:
+      - "54320:5432"
+    expose: ["5432"]
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+  #   container_name: "elasticsearch"
+  #   ports:
+  #    - "9210:9200"
+  #   expose: ["9200"]
+
+  zeppelin:
+    image: "apache/zeppelin:0.8.1"
+    container_name: "zeppelin"
+    ports:
+      - "8090:8080"
