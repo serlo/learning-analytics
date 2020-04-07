@@ -16,7 +16,7 @@ Achtung: Das Passwort für die JDBC/Postgres Connection wurde beim Import nicht 
 
 3. Postgres-Konfiguration:
 CONTAINER:
-	psql -u postgres
+	psql -d postgres
 	> CREATE DATABASE nifi;
     > \c nifi;
 	> CREATE TABLE flow_files (
