@@ -53,6 +53,8 @@ psql -d postgres
 
 ### Beispiel für Abfrage:
 
+See  [`test.sh`](./container/learning-analytics/test.sh)
+
 ```
 curl -X POST \
   http://localhost:8090/api/notebook/run/2EZMATNCU/20200109-205741_1474479729 \
